@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CollegeGPT - AI Powered College Assistant</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg fixed-top main-navbar">
+        <div class="container-fluid px-md-5">
+            <a class="navbar-brand d-flex align-items-center" href="#">
+                <img src="{{ url_for('static', filename='images/logo.png') }}" width="55" class="me-2" alt="College Logo">
+                <div class="brand-text">
+                    <span class="d-none d-sm-block college-title">Campus Study Assistant</span>
+                    <span class="app-title">CAMPUS CollegeGPT</span>
+                </div>
+            </a>
+            <button class="navbar-toggler custom-toggler" type="text/items" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                <ul class="navbar-nav align-items-center">
+                    <li class="nav-item"><a class="nav-link active" href="#">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">About</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Departments</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Contact</a></li>
+                    {% if session.get('reg_no') %}
+                        <li class="nav-item ms-lg-3 dropdown">
+                            <a class="nav-link dropdown-toggle text-white fw-semibold" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fa-solid fa-circle-user me-2"></i>Hi, {{ session.get('name') }}
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end border-0 shadow" aria-labelledby="navbarDropdown" style="border-radius: 12px;">
+                                <li class="px-3 py-2 small text-muted text-nowrap">Dept: {{ session.get('department') }}</li>
+                                <li class="px-3 pb-2 small text-muted">Year: {{ session.get('year') }}</li>
+                                <li><hr class="dropdown-divider m-0"></li>
+                                <li><a class="dropdown-item py-2 text-danger small" href="/logout"><i class="fa-solid fa-power-off me-2"></i>Logout</a></li>
+                            </ul>
+                        </li>
+                    {% else %}
+                        <li class="nav-item ms-lg-3">
+                            <a href="/login" class="btn btn-login-nav"><i class="fa-solid fa-user me-2"></i>Login</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <section class="hero-section">
+        <div class="hero-overlay"></div>
+        <div class="container hero-content text-center">
+            <h1 class="display-3 fw-bold text-white mb-3">Welcome to<br><span class="highlight-text">Campus CollegeGPT</span></h1>
+            <p class="lead text-white-50 fs-4 mb-5">AI Powered College Assistant</p>
+            <div class="hero-buttons d-flex justify-content-center gap-3 flex-wrap">
+                {% if session.get('reg_no') %}
+                <a href="/chat" class="btn btn-white-glass px-4 py-3">
+                    <i class="fa-solid fa-comment-dots me-2"></i>Start Chat
+                </a>
+                {% else %}
+                <a href="/login" class="btn btn-primary-gradient px-4 py-3">
+                    <i class="fa-solid fa-user me-2"></i>Login
+                </a>
+                {% endif %}
+            </div>
+        </div>
+        <div class="curve-bottom">
+            <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+                <path d="M0,0V46.29c47.79,22.2,103.59,32.17,158,28,70.36-5.37,136.33-33.31,206.8-37.5C438.64,32.43,512.34,53.67,583,72.05c69.27,18,138.3,24.88,209.4,13.08,36.15-6,69.85-17.84,104.45-29.34C989.49,25,1113-14.29,1200,42.4V0Z" class="shape-fill"></path>
+            </svg>
+        </div>
+    </section>
+
+    <section class="about-section py-5">
+        <div class="container py-4">
+            <h2 class="text-center section-title mb-5">About Our College</h2>
+            <div class="row g-4 justify-content-center">
+                <div class="col-xl-3 col-md-6">
+                    <div class="card about-card text-center p-4 h-100">
+                        <div class="icon-wrapper mx-auto mb-4 bg-light-blue">
+                            <i class="fa-solid fa-graduation-cap text-primary-blue"></i>
+                        </div>
+                        <h4 class="card-heading h5 fw-bold mb-3">AK University Affiliated</h4>
+                        <p class="text-muted small">Proudly affiliated to AK University, Chennai.</p>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-md-6">
+                    <div class="card about-card text-center p-4 h-100">
+                        <div class="icon-wrapper mx-auto mb-4 bg-light-blue">
+                            <i class="fa-solid fa-robot text-primary-blue"></i>
+                        </div>
+                        <h4 class="card-heading h5 fw-bold mb-3">AI Powered Student Assistant</h4>
+                        <p class="text-muted small">Get instant answers to your college related queries.</p>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-md-6">
+                    <div class="card about-card text-center p-4 h-100">
+                        <div class="icon-wrapper mx-auto mb-4 bg-light-blue">
+                            <i class="fa-solid fa-bell text-primary-blue"></i>
+                        </div>
+                        <h4 class="card-heading h5 fw-bold mb-3">Latest Notices</h4>
+                        <p class="text-muted small">Stay updated with the latest announcements and events.</p>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-md-6">
+                    <div class="card about-card text-center p-4 h-100">
+                        <div class="icon-wrapper mx-auto mb-4 bg-light-blue">
+                            <i class="fa-solid fa-building-columns text-primary-blue"></i>
+                        </div>
+                        <h4 class="card-heading h5 fw-bold mb-3">Departments</h4>
+                        <p class="text-muted small">Explore our various departments and academic programs.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer-section pt-5 pb-3">
+        <div class="container">
+            <div class="row g-4 mb-4">
+                <div class="col-lg-4 col-md-6">
+                    <h5 class="footer-heading mb-3">About Campus</h5>
+                    <p class="footer-text-muted small">Our Campus Management committed to academic excellence and holistic development.</p>
+                </div>
+                <div class="col-lg-2 col-md-6">
+                    <h5 class="footer-heading mb-3">Quick Links</h5>
+                    <ul class="list-unstyled footer-links small">
+                        <li><a href="#">Home</a></li>
+                        <li><a href="#">About</a></li>
+                        <li><a href="#">Departments</a></li>
+                        <li><a href="#">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <h5 class="footer-heading mb-3">Contact Us</h5>
+                    <p class="footer-text-muted small mb-1"><i class="fa-solid fa-location-dot me-2 text-info"></i> Tiruchendur - 628215, Tamil Nadu</p>
+                    <p class="footer-text-muted small mb-1"><i class="fa-solid fa-phone me-2 text-info"></i> 04639 284110</p>
+                    <p class="footer-text-muted small"><i class="fa-solid fa-envelope me-2 text-info"></i> info@dsacooe.ac.in</p>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <h5 class="footer-heading mb-3">Follow Us</h5>
+                    <div class="d-flex gap-2">
+                        <a href="#" class="social-icon-btn"><i class="fa-brands fa-facebook-f"></i></a>
+                        <a href="#" class="social-icon-btn"><i class="fa-brands fa-linkedin-in"></i></a>
+                        <a href="#" class="social-icon-btn"><i class="fa-brands fa-instagram"></i></a>
+                    </div>
+                </div>
+            </div>
+            <hr class="border-secondary my-4">
+            <div class="row small text-center text-md-between align-items-center">
+                <div class="col-md-6 footer-text-muted mb-2 mb-md-0">
+                    &copy; 2026 Campus Study Assistant. All Rights Reserved.
+                </div>
+                <div class="col-md-6 text-md-end footer-text-muted">
+                    Designed with <i class="fa-solid fa-heart text-danger mx-1"></i> for CAMPUS
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <div class="study-assistant-widget" id="studyAssistantWidget" onclick="window.location.href='/study-assistant'">
+    <div class="speech-bubble">Hi! Need notes, summary or quiz?</div>
+    <div class="robot-avatar">
+        <img src="{{ url_for('static', filename='images/robot.png') }}" class="robot-image">
+        <div class="pulse-ring"></div>
+    </div>
+</div>
+
+<style>
+    .study-assistant-widget {
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        z-index: 9999;
+        cursor: pointer;
+        display: flex;
+        animation:floatRobot 3s ease-in-out infinite;
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 8px;
+    }
+
+    /* Floating Animation */
+    .robot-avatar {
+        width: 120px;
+        height: 120px;
+        background: linear-gradient(135deg, #00d2ff 0%, #0A4FA8 100%);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 1.8rem;
+        box-shadow: 0 8px 25px rgba(10, 79, 168, 0.4);
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        position: relative;
+        animation: floatUpDown 3s ease-in-out infinite;
+        transition: transform 0.3s ease;
+    }
+    .robot-image{
+        width:100%;
+        height:100%;
+        object-fit:cover;
+    }
+
+    .study-assistant-widget:hover .robot-avatar {
+        transform: scale(1.08);
+    }
+
+    /* Pulse wave effect around avatar */
+    .pulse-ring {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        border: 2px solid #00d2ff;
+        border-radius: 50%;
+        animation: pulseRing 2s linear infinite;
+        top: 0;
+        left: 0;
+    }
+
+    /* Speech Bubble Setup */
+    .speech-bubble {
+        background: white;
+        color: #333;
+        padding: 12px 18px;
+        border-radius: 15px;
+        font-family: 'Poppins', sans-serif;
+        font-size: 0.85rem;
+        font-weight: bold;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+        border: 1px solid rgba(0, 0, 0, 0.05);
+        white-space: nowrap;
+        position: relative;
+        opacity: 0;
+        transform: translateY(10px);
+        animation: float 2s infinite;
+        animation-delay: 1s;
+    }
+
+    .speech-bubble::after {
+        content: '';
+        position: absolute;
+        bottom: -6px;
+        right: 25px;
+        width: 12px;
+        height: 12px;
+        background: white;
+        transform: rotate(45deg);
+        border-right: 1px solid rgba(0, 0, 0, 0.05);
+        border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    }
+
+    /* Keyframe Animations */
+    @keyframes floatUpDown {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-12px); }
+    }
+
+    @keyframes pulseRing {
+        0% { transform: scale(0.95); opacity: 0.8; }
+        100% { transform: scale(1.4); opacity: 0; }
+    }
+
+    @keyframes fadeInBubble {
+        to { opacity: 1; transform: translateY(0); }
+    }
+</style>
+</body>
+</html>

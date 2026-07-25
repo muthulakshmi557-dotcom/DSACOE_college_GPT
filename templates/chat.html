@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CollegeGPT Assistant - Chat</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Custom Variable Layout definitions matching DSACOE branding identity */
+        :root {
+            --primary-blue: #0A4FA8;
+            --dark-blue: #041E42;
+            --glass-accent: rgba(255, 255, 255, 0.15);
+            --bot-bubble-bg: #FFFFFF;
+            --user-bubble-gradient: linear-gradient(135deg, #1e70e0 0%, #0A4FA8 100%);
+            --font-stack: 'Poppins', sans-serif;
+            --radius-standard: 20px;
+        }
+
+        /* Background: Blurred Campus Image setup */
+        body {
+            font-family: var(--font-stack);
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            background: url('/static/images/campus.png') no-repeat center center fixed;
+            background-size: cover;
+        }
+
+        /* Subtle blurring mask overlaid across the entire site body background */
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(4, 30, 66, 0.25);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);;
+            z-index: -1;
+        }
+
+        /* Hero Section Setup using Admin Block as a Banner background */
+        .hero-banner {
+            position: relative;
+            background: url('/static/images/campus.png') no-repeat center center;
+            background-size: cover;
+            padding: 25px 0;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .hero-overlay {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(90deg, rgba(4, 30, 66, 0.95) 0%, rgba(10, 79, 168, 0.8) 100%);
+            z-index: 1;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .college-logo-main {
+            width: 65px;
+            height: auto;
+            filter: drop-shadow(0px 4px 6px rgba(0,0,0,0.15));
+        }
+
+        .college-title {
+            font-size: 0.95rem;
+            font-weight: 500;
+            letter-spacing: 1px;
+            opacity: 0.9;
+            margin: 0;
+        }
+
+        .app-headline {
+            font-size: 1.85rem;
+            font-weight: 700;
+            margin: 2px 0;
+            text-shadow: 0px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .app-subtitle {
+            font-size: 0.85rem;
+            font-weight: 300;
+            letter-spacing: 0.5px;
+            color: #00d2ff;
+        }
+
+        .welcome-pill {
+            background: rgba(255, 255, 255, 0.12);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 6px 14px;
+            border-radius: 30px;
+            font-size: 0.85rem;
+            display: inline-block;
+            color: #ffffff;
+        }
+
+        .btn-back-dashboard {
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white !important;
+            border-radius: 30px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-back-dashboard:hover {
+            background: #ffffff;
+            color: var(--dark-blue) !important;
+            transform: translateY(-2px);
+        }
+
+        /* Modern Glassmorphism Chat Container Grid setup */
+        .chat-card-container {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            border-radius: var(--radius-standard);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+            width: 90%;
+            height: 78vh;
+            overflow: hidden;
+        }
+
+        /* Left Side Navigation / Info Sidebar Panel style configurations */
+        .info-sidebar {
+            background: rgba(4, 30, 66, 0.7);
+            border-right: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        .sidebar-logo {
+            width: 55px;
+        }
+
+        .bg-success-glow {
+            background-color: #2ec4b6;
+            color: #fff;
+            font-size: 0.75rem;
+            box-shadow: 0 0 10px rgba(46, 196, 182, 0.4);
+        }
+
+        .info-item-box {
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 14px;
+            padding: 12px 16px;
+            transition: background 0.3s ease;
+        }
+
+        .info-item-box:hover {
+            background: rgba(255, 255, 255, 0.12);
+        }
+
+        .info-icon-wrapper {
+            background: var(--user-bubble-gradient);
+            color: white;
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.95rem;
+        }
+
+        .text-light-muted {
+            color: rgba(255, 255, 255, 0.55);
+            font-size: 0.75rem;
+        }
+
+        /* Right Side Window Frame Engine Layout */
+        .chat-main-engine {
+            background: rgba(248, 249, 250, 0.4);
+            height: 100%;
+        }
+
+        .chat-history {
+            flex: 1;
+            overflow-y: auto;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        /* Message Bubble Animation and Layout details */
+        .message-bubble {
+            max-width: 75%;
+            padding: 14px 20px;
+            font-size: 0.92rem;
+            line-height: 1.5;
+            word-wrap: break-word;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04);
+        }
+
+        .message-user {
+            background: var(--user-bubble-gradient);
+            color: white;
+            align-self: flex-end;
+            border-radius: 20px 20px 4px 20px;
+        }
+
+        .message-bot {
+            background-color: var(--bot-bubble-bg);
+            color: #222;
+            align-self: flex-start;
+            border-radius: 20px 20px 20px 4px;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        /* Quick Question Recommendation Chips layout */
+        .chip-btn {
+            background: #ffffff;
+            border: 1px solid rgba(10, 79, 168, 0.15);
+            color: var(--primary-blue);
+            padding: 6px 14px;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+            cursor: pointer;
+        }
+
+        .chip-btn:hover {
+            background: var(--primary-blue);
+            color: #ffffff;
+            transform: scale(1.03);
+            box-shadow: 0 4px 10px rgba(10, 79, 168, 0.2);
+        }
+
+        /* Input Area Custom Rounded Elements configuration */
+        .btn-send-pill {
+            background: var(--user-bubble-gradient);
+            color: white;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: none;
+            transition: all 0.2s ease;
+        }
+
+        .btn-send-pill:hover {
+            transform: scale(1.06);
+            box-shadow: 0 4px 12px rgba(10, 79, 168, 0.35);
+            color: white;
+        }
+
+        /* Global Layout Footer styles */
+        .app-footer {
+            background: var(--dark-blue);
+            font-size: 0.8rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            z-index: 5;
+        }
+
+        /* Animations CSS Rules injection */
+        .animate-fade-in {
+            animation: bubbleUp 0.35s cubic-bezier(0.1, 0.8, 0.3, 1) forwards;
+        }
+
+        @keyframes bubbleUp {
+            from { opacity: 0; transform: translateY(12px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Responsive Layout Optimization Breakpoints */
+        @media (max-width: 991.5px) {
+            .chat-card-container {
+                height: 65vh;
+                width: 95%;
+            }
+            .app-headline { font-size: 1.5rem; }
+            .college-title { font-size: 0.8rem; }
+        }
+
+        @media (max-width: 576px) {
+            .chat-card-container {
+                height: 58vh;
+            }
+            .hero-banner { padding: 15px 0; }
+            .message-bubble { max-width: 88%; }
+            .query-chips-wrapper {
+                overflow-x: auto;
+                white-space: nowrap;
+                flex-wrap: nowrap !important;
+                padding-bottom: 4px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="hero-banner">
+        <div class="hero-overlay"></div>
+        <div class="container hero-content d-flex align-items-center justify-content-between flex-wrap gap-3">
+            <div class="d-flex align-items-center gap-3">
+                <img src="/static/images/logo.png" class="college-logo-main" alt="DSACOE Logo">
+                <div>
+                    <h2 class="college-title">Campus Study Assistant</h2>
+                    <h1 class="app-headline">Campus CollegeGPT</h1>
+                    <p class="app-subtitle mb-0"><i class="fa-solid fa-wand-magic-sparkles me-1"></i> AI Powered Campus Assistant</p>
+                </div>
+            </div>
+            <div class="text-md-end text-start header-right-pill">
+                <div class="welcome-pill mb-2">
+                    <i class="fa-solid fa-user-circle me-2"></i>Welcome, <strong>{{ session.get('name', 'Student') }}</strong>
+                </div>
+                <a href="/dashboard" class="btn btn-back-dashboard btn-sm">
+                    <i class="fa-solid fa-arrow-left me-1"></i> Dashboard
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="container my-4 d-flex justify-content-center align-items-center flex-grow-1">
+        
+        <div class="chat-card-container row g-0">
+            
+            <section class="col-lg-4 d-none d-lg-flex flex-column info-sidebar p-4">
+                <div class="sidebar-card text-center mb-4 p-3">
+                    <img src="/static/images/logo.png" class="sidebar-logo mb-2" alt="DSACOE Logo">
+                    <h5 class="fw-bold mb-1 text-white">College Campus Info</h5>
+                    <span class="badge bg-success-glow px-3 py-1">System Operational</span>
+                </div>
+                
+                <div class="sidebar-details-list d-flex flex-column gap-3">
+                    <div class="info-item-box d-flex align-items-center gap-3">
+                        <div class="info-icon-wrapper"><i class="fa-solid fa-calendar-day"></i></div>
+                        <div>
+                            <small class="text-light-muted d-block">Today's Date</small>
+                            <span class="fw-semibold text-white" id="currentDate">July 12, 2026</span>
+                        </div>
+                    </div>
+                    
+                    <div class="info-item-box d-flex align-items-center gap-3">
+                        <div class="info-icon-wrapper"><i class="fa-solid fa-clock"></i></div>
+                        <div>
+                            <small class="text-light-muted d-block">College Timing</small>
+                            <span class="fw-semibold text-white">09:00 AM - 04:30 PM</span>
+                        </div>
+                    </div>
+                    
+                    <div class="info-item-box d-flex align-items-center gap-3">
+                        <div class="info-icon-wrapper"><i class="fa-solid fa-envelope"></i></div>
+                        <div>
+                            <small class="text-light-muted d-block">Support Mail</small>
+                            <span class="fw-semibold text-white text-break"> drsacooe@aei.edu.in</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-auto sidebar-footer-branding pt-3 border-top border-secondary border-opacity-25 text-center">
+                    <small class="text-light-muted">Tiruchendur, Tamil Nadu</small>
+                </div>
+            </section>
+
+            <section class="col-lg-8 col-12 d-flex flex-column chat-main-engine">
+                
+                <div class="chat-history" id="chatHistory">
+                    <div class="message-bubble message-bot animate-fade-in">
+                        👋 <strong>Welcome {{ session.get('name', 'Student') }}</strong>!<br><br>
+                        I'm <strong>Campus CollegeGPT</strong>, your AI Campus Assistant.<br><br>
+                        I can help you with:
+                        <br>👨‍🏫 HOD Details
+                        <br>🚌 College Bus Routes & Timings
+                        <br>📋 Admission Information
+                        <br>📖 College Rules & Regulations<br><br>
+                        💬 <strong>Type your question below to get started.</strong>
+                    </div>
+                </div>
+
+                <div class="suggested-queries-bar px-4 py-2">
+                    <small class="text-muted d-block mb-1"><i class="fa-solid fa-lightbulb text-warning me-1"></i> Suggested Queries:</small>
+                    <div class="d-flex flex-wrap gap-2 query-chips-wrapper">
+                        <button class="chip-btn" onclick="quickQuery('HOD Details')">👨‍🏫 HOD Details</button>
+                        <button class="chip-btn" onclick="quickQuery('Bus Details')">🚌 Bus Details</button>
+                        <button class="chip-btn" onclick="quickQuery('Admission details')">📋 Admission</button>
+                        <button class="chip-btn" onclick="quickQuery('College Rules')">📖 Rules</button>
+                        <button class="chip-btn" onclick="quickQuery('Departments info')">🏢 Departments</button>
+                    </div>
+                </div>
+
+                <div class="chat-input-area p-3 border-top border-light border-opacity-10">
+                    <div class="input-group align-items-center bg-white rounded-pill px-3 shadow-sm border">
+                        <span class="text-muted ps-2 pe-1 cursor-pointer"><i class="fa-solid fa-microphone text-primary"></i></span>
+                        <input type="text" id="userInput" class="form-control border-0 bg-transparent py-3 chat-control shadow-none" placeholder="Ask anything about DSACOE..." autocomplete="off">
+                        <button class="btn btn-send-pill ms-2" id="sendBtn" onclick="sendMessage()">
+                            <i class="fa-solid fa-paper-plane"></i>
+                        </button>
+                    </div>
+                </div>
+
+            </section>
+        </div>
+    </main>
+
+    <footer class="app-footer text-center py-3 mt-auto">
+        <p class="mb-1 text-white-50">© 2026 Campus CollegeGPT | All Rights Reserved.</p>
+        <p class="mb-0 small text-white-50 opacity-75">Developed using Flask • SQLite • Bootstrap 5</p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        const userInput = document.getElementById("userInput");
+        const sendBtn = document.getElementById("sendBtn");
+        const chatHistory = document.getElementById("chatHistory");
+
+        // UI Enhancement Helper: Automatically sets client's current local date in sidebar
+        document.getElementById('currentDate').innerText = new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+
+        // Helper function for Suggested Questions to auto-submit choice
+        function quickQuery(text) {
+            userInput.value = text;
+            sendMessage();
+        }
+
+        // Execute processing when User presses Enter inside input element
+        userInput.addEventListener("keypress", function(event) {
+            if (event.key === "Enter") {
+                sendMessage();
+            }
+        });
+
+        function sendMessage() {
+            const queryText = userInput.value.trim();
+            if (!queryText) return;
+
+            // 1. Append User Bubble to Interface Row
+            appendBubble(queryText, "user");
+            userInput.value = ""; // Clear Input text
+
+            // 2. Display Loader/Typing Bubble temporarily
+            const typingId = appendBubble("<i class='fa-solid fa-circle-notch fa-spin me-2'></i>Searching database...", "bot");
+
+            // 3. Post Request to Backend /ask Route
+            fetch("/ask", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ message: queryText })
+            })
+            .then(response => {
+                if (!response.ok) throw new Error("Network auth status issue");
+                return response.json();
+            })
+            .then(data => {
+                // Remove the typing fallback element
+                document.getElementById(typingId).remove();
+                // Append real matching response text directly
+                appendBubble(data.response, "bot");
+            })
+            .catch(error => {
+                document.getElementById(typingId).remove();
+                appendBubble("Error processing connection to the query server. Please check your system status.", "bot");
+                console.error(error);
+            });
+        }
+
+        function appendBubble(text, sender) {
+            const bubble = document.createElement("div");
+            const bubbleId = "bubble_" + Date.now() + "_" + Math.floor(Math.random() * 100);
+            bubble.id = bubbleId;
+            bubble.classList.add("message-bubble");
+            
+            if (sender === "user") {
+                bubble.classList.add("message-user");
+            } else {
+                bubble.classList.add("message-bot");
+            }
+            
+            bubble.innerHTML = text;
+            chatHistory.appendChild(bubble);
+            
+            // Instantly auto-scroll down to the newest text bubble
+            chatHistory.scrollTop = chatHistory.scrollHeight;
+            return bubbleId;
+        }
+    </script>
+</body>
+</html>

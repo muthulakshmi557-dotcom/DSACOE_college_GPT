@@ -1,0 +1,220 @@
+/* Layout configurations targeting ChatGPT look and glassmorphism structure */
+body {
+    font-family: 'Poppins', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+    padding: 0;
+    background: url('/static/images/campus.png') no-repeat center center fixed;
+    background-size: cover;
+    position: relative;
+    color: #f8f9fa;
+}
+
+/* Blur overlay backdrop logic mask configuration */
+body::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(4, 30, 66, 0.55);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    z-index: -1;
+}
+
+/* Glassmorphism Panel Setup elements */
+.glass-panel {
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 20px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+}
+
+/* Workspace Grid dimensions alignment padding adjustments */
+.workspace-nav {
+    background: rgba(4, 30, 66, 0.85);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+}
+
+.workspace-brand {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #ffffff;
+    letter-spacing: 0.5px;
+}
+
+.workspace-container {
+    margin-top: 85px;
+    margin-bottom: 20px;
+    flex: 1;
+    height: calc(100vh - 145px);
+}
+
+.text-light-muted {
+    color: rgba(248, 249, 250, 0.65);
+}
+
+.bg-dark-trans {
+    background: rgba(0, 0, 0, 0.35);
+}
+
+/* Media Item Upload Target Styling configurations */
+.upload-zone {
+    border: 2px dashed rgba(255, 255, 255, 0.25);
+    border-radius: 14px;
+    background: rgba(0, 0, 0, 0.15);
+    transition: all 0.3s ease;
+}
+
+.upload-zone:hover {
+    border-color: #00d2ff;
+    background: rgba(0, 0, 0, 0.25);
+}
+
+.btn-upload {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #fff;
+    border-radius: 20px;
+    font-size: 0.78rem;
+    padding: 5px 14px;
+    transition: all 0.2s ease;
+}
+
+.btn-upload:hover {
+    background: #00d2ff;
+    color: #041E42;
+    transform: translateY(-1px);
+}
+
+/* Option Feature Buttons styling configurations */
+.btn-action-pill {
+    background: linear-gradient(135deg, rgba(10, 79, 168, 0.4) 0%, rgba(4, 30, 66, 0.6) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #ffffff;
+    padding: 12px;
+    border-radius: 12px;
+    font-weight: 500;
+    text-align: left;
+    font-size: 0.9rem;
+    transition: all 0.2s ease;
+}
+
+.btn-action-pill:hover {
+    background: linear-gradient(135deg, #0A4FA8 0%, #00d2ff 100%);
+    color: #fff;
+    transform: translateX(4px);
+    box-shadow: 0 4px 15px rgba(0,210,255,0.2);
+}
+
+/* Output Canvas Section setups */
+.output-render-viewport {
+    flex: 1;
+    overflow-y: auto;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 0 0 12px 12px;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Render Item card structural definitions injection rules */
+.output-card-response {
+    background: rgba(255, 255, 255, 0.95);
+    color: #222222;
+    border-radius: 16px;
+    padding: 20px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+}
+
+.flashcard-deck {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 16px;
+}
+
+.study-flashcard {
+    background: #ffffff;
+    color: #333;
+    border-radius: 12px;
+    padding: 18px;
+    min-height: 140px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-weight: 500;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+    cursor: pointer;
+    transition: transform 0.3s;
+    border-left: 4px solid #00d2ff;
+}
+
+.study-flashcard:hover {
+    transform: translateY(-4px);
+}
+
+.quiz-question-block {
+    background: #f8f9fa;
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 12px;
+    border: 1px solid #e9ecef;
+}
+
+.quiz-option-btn {
+    display: block;
+    width: 100%;
+    text-align: left;
+    background: white;
+    border: 1px solid #ced4da;
+    padding: 10px 14px;
+    border-radius: 8px;
+    margin-top: 6px;
+    font-size: 0.88rem;
+    transition: all 0.2s;
+}
+
+.quiz-option-btn:hover {
+    background: #eef2f6;
+    border-color: #0A4FA8;
+}
+
+/* Chat Field bottom entry tools adjustments */
+.btn-send-circle {
+    background: #00d2ff;
+    color: #041E42;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    transition: transform 0.2s;
+}
+
+.btn-send-circle:hover {
+    transform: scale(1.05);
+    color: #041E42;
+    background: #ffffff;
+}
+
+.workspace-footer {
+    background: rgba(4, 30, 66, 0.9);
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.max-w-400 { max-width: 400px; }
+
+.animate-fade-in {
+    animation: fadeIn 0.4s ease-out forwards;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+}

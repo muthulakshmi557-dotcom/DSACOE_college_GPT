@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DSACOE CollegeGPT - Student Login</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-blue: #0A4FA8;
+            --dark-blue: #062f66;
+            --navy-footer: #041E42;
+            --light-bg: #f4f7fc;
+            --transition-smooth: all 0.3s ease;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--light-bg);
+            color: #333;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Main wrapper to hold content and background image with a curve layout */
+        .page-content-wrapper {
+            flex: 1;
+            position: relative;
+            background:url('/static/images/building.png')center center/cover no-repeat;
+            padding-bottom: 120px;
+        }
+
+        .background-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.85);
+            z-index: 1;
+        }
+
+        .main-container {
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Header Area styles */
+        .header-logo {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, #FFD700, #FF4500);
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 1.8rem;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        .college-title {
+            color: var(--dark-blue);
+            font-weight: 700;
+            font-size: 1.8rem;
+            letter-spacing: -0.5px;
+        }
+
+        .subtitle {
+            color: #666;
+            font-weight: 500;
+            font-size: 0.95rem;
+            position: relative;
+            display: inline-block;
+        }
+
+        .subtitle::after {
+            content: '';
+            position: absolute;
+            width: 40px;
+            height: 3px;
+            background-color: var(--primary-blue);
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 2px;
+        }
+
+        /* Glassmorphism Login Card */
+        .login-card {
+            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            border-radius: 24px;
+            box-shadow: 0 15px 35px rgba(4, 30, 66, 0.08);
+            max-width: 480px;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        .user-icon-avatar {
+            width: 60px;
+            height: 60px;
+            background-color: rgba(10, 79, 168, 0.1);
+            color: var(--primary-blue);
+            font-size: 1.6rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .card-title {
+            color: var(--dark-blue);
+            font-weight: 700;
+            position: relative;
+            display: inline-block;
+        }
+
+        .card-title::after {
+            content: '';
+            position: absolute;
+            width: 35px;
+            height: 3px;
+            background-color: var(--primary-blue);
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 2px;
+        }
+
+        .form-label {
+            font-weight: 600;
+            font-size: 0.85rem;
+            color: #444;
+        }
+
+        .input-group-text {
+            background-color: #fff;
+            border-right: none;
+            color: #999;
+            border-radius: 10px 0 0 10px;
+        }
+
+        .form-control {
+            border-left: none;
+            font-size: 0.95rem;
+            padding: 10px 12px;
+            border-radius: 0 10px 10px 0;
+        }
+
+        .form-control:focus {
+            border-color: #dee2e6;
+            box-shadow: none;
+        }
+
+        .input-group:focus-within .input-group-text,
+        .input-group:focus-within .form-control {
+            border-color: var(--primary-blue);
+        }
+
+        .password-toggle {
+            cursor: pointer;
+            border-left: none;
+            border-radius: 0 10px 10px 0 !important;
+            background: #fff;
+            color: #999;
+        }
+
+        .password-field {
+            border-right: none !important;
+            border-radius: 0 !important;
+        }
+
+        .form-check-label, .forgot-link {
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .forgot-link {
+            color: var(--primary-blue);
+            text-decoration: none;
+        }
+
+        .forgot-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Buttons styling */
+        .btn-login {
+            background: linear-gradient(135deg, #1e70e0 0%, var(--primary-blue) 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 11px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            box-shadow: 0 4px 15px rgba(30, 112, 224, 0.3);
+            transition: var(--transition-smooth);
+        }
+
+        .btn-login:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 18px rgba(30, 112, 224, 0.45);
+            color: white;
+        }
+
+        .divider-text {
+            position: relative;
+            text-align: center;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #aaa;
+            margin: 20px 0;
+        }
+
+        .divider-text::before, .divider-text::after {
+            content: "";
+            position: absolute;
+            top: 50%;
+            width: 42%;
+            height: 1px;
+            background-color: #e0e0e0;
+        }
+
+        .divider-text::before { left: 0; }
+        .divider-text::after { right: 0; }
+
+        .btn-home {
+            background-color: transparent;
+            color: var(--primary-blue);
+            border: 1.5px solid var(--primary-blue);
+            border-radius: 10px;
+            padding: 10px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: var(--transition-smooth);
+        }
+
+        .btn-home:hover {
+            background-color: rgba(10, 79, 168, 0.05);
+            transform: translateY(-2px);
+            color: var(--primary-blue);
+        }
+
+        /* Dynamic Curved Divider Section */
+        .curve-bottom {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            overflow: hidden;
+            line-height: 0;
+            transform: rotate(180deg);
+            z-index: 2;
+        }
+
+        .curve-bottom svg {
+            position: relative;
+            display: block;
+            width: calc(100% + 1.3px);
+            height: 80px;
+        }
+
+        .curve-bottom .shape-fill {
+            fill: var(--navy-footer);
+        }
+
+        /* Footer Layer */
+        .footer-section {
+            background-color: var(--navy-footer);
+            color: #ffffff;
+            position: relative;
+            z-index: 3;
+        }
+
+        .footer-heading {
+            font-size: 1.05rem;
+            font-weight: 600;
+        }
+
+        .footer-text-muted {
+            color: #a0b3cd;
+        }
+
+        .footer-links li {
+            margin-bottom: 8px;
+        }
+
+        .footer-links a {
+            color: #a0b3cd;
+            text-decoration: none;
+            transition: var(--transition-smooth);
+        }
+
+        .footer-links a:hover {
+            color: #ffffff;
+            padding-left: 4px;
+        }
+
+        .social-icon-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.08);
+            color: #ffffff;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            transition: var(--transition-smooth);
+        }
+
+        .social-icon-btn:hover {
+            background: var(--primary-blue);
+            transform: translateY(-2px);
+            color: white;
+        }
+
+        @media (max-width: 576px) {
+            .college-title {
+                font-size: 1.3rem;
+            }
+            .login-card {
+                padding: 24px !important;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="page-content-wrapper d-flex flex-column align-items-center justify-content-center">
+        <div class="background-overlay"></div>
+
+        <div class="container main-container py-5">
+            <div class="text-center mb-4">
+                <div class="text-center mb-3">
+                    <img src="/static/images/logo.png" width="90">
+                </div>
+                <h1 class="college-title mb-1">Campus Study Assistant</h1>
+                <p class="subtitle">CAMPUS CollegeGPT - AI Powered College Assistant</p>
+            </div>
+
+            <div class="card login-card p-4 p-sm-5 mt-5">
+                <div class="d-flex flex-column align-items-center mb-4">
+                    <div class="user-icon-avatar mb-3">
+                        <i class="fa-solid fa-user"></i>
+                    </div>
+                    <h2 class="card-title h4">Student Login</h2>
+                </div>
+
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        {% for category, message in messages %}
+                            <div class="alert alert-danger text-center small py-2 border-0" role="alert" style="border-radius: 10px;">
+                                <i class="fa-solid fa-circle-exclamation me-2"></i>{{ message }}
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+
+                <form method="POST" action="/login">
+                    <div class="mb-3">
+                        <label for="registerNumber" class="form-label">Register Number</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fa-solid fa-user-tag"></i></span>
+                            <input type="text" class="form-control" id="registerNumber" name="registerNumber" placeholder="Enter your register number" required>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Password</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fa-solid fa-lock"></i></span>
+                            <input type="password" class="form-control password-field" id="password" name="password" placeholder="Enter your password" required>
+                            <span class="input-group-text password-toggle" onclick="togglePasswordView()"><i class="fa-solid fa-eye" id="passwordIcon"></i></span>
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input" id="rememberMe">
+                            <label class="form-check-label text-muted" for="rememberMe">Remember me</label>
+                        </div>
+                        <a href="#" class="forgot-link">Forgot Password?</a>
+                    </div>
+
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-login"><i class="fa-solid fa-right-to-bracket me-2"></i>Login</button>
+                    </div>
+
+                    <div class="divider-text">OR</div>
+
+                    <div class="d-grid gap-2">
+                        <a href="/" class="btn btn-home"><i class="fa-solid fa-house me-2"></i>Back to Home</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="curve-bottom">
+            <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+                <path d="M0,0V46.29c47.79,22.2,103.59,32.17,158,28,70.36-5.37,136.33-33.31,206.8-37.5C438.64,32.43,512.34,53.67,583,72.05c69.27,18,138.3,24.88,209.4,13.08,36.15-6,69.85-17.84,104.45-29.34C989.49,25,1113-14.29,1200,42.4V0Z" class="shape-fill"></path>
+            </svg>
+        </div>
+    </div>
+
+    <footer class="footer-section pt-5 pb-3">
+        <div class="container">
+            <div class="row g-4 mb-4">
+                <div class="col-lg-4 col-md-6">
+                    <h5 class="footer-heading mb-3">About CAMPUS</h5>
+                    <p class="footer-text-muted small">Our Campus Management committed to academic excellence and holistic development.</p>
+                </div>
+                <div class="col-lg-2 col-md-6">
+                    <h5 class="footer-heading mb-3">Quick Links</h5>
+                    <ul class="list-unstyled footer-links small">
+                        <li><a href="#">Home</a></li>
+                        <li><a href="#">About</a></li>
+                        <li><a href="#">Departments</a></li>
+                        <li><a href="#">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <h5 class="footer-heading mb-3">Contact Us</h5>
+                    <p class="footer-text-muted small mb-1"><i class="fa-solid fa-location-dot me-2 text-info"></i> Tiruchendur - 628215, Tamil Nadu</p>
+                    <p class="footer-text-muted small mb-1"><i class="fa-solid fa-phone me-2 text-info"></i> 04639 284000</p>
+                    <p class="footer-text-muted small"><i class="fa-solid fa-envelope me-2 text-info"></i> info@dsacoe.ac.in</p>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <h5 class="footer-heading mb-3">Follow Us</h5>
+                    <div class="d-flex gap-2">
+                        <a href="#" class="social-icon-btn"><i class="fa-brands fa-facebook-f"></i></a>
+                        <a href="#" class="social-icon-btn"><i class="fa-brands fa-linkedin-in"></i></a>
+                        <a href="#" class="social-icon-btn"><i class="fa-brands fa-instagram"></i></a>
+                    </div>
+                </div>
+            </div>
+            <hr class="border-secondary my-4">
+            <div class="row small text-center text-md-between align-items-center">
+                <div class="col-md-6 footer-text-muted mb-2 mb-md-0">
+                    &copy; 2026 Campus Study Assistant. All Rights Reserved.
+                </div>
+                <div class="col-md-6 text-md-end footer-text-muted">
+                    Designed with <i class="fa-solid fa-heart text-danger mx-1"></i> for CAMPUS
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function togglePasswordView() {
+            const passwordField = document.getElementById("password");
+            const passwordIcon = document.getElementById("passwordIcon");
+            if (passwordField.type === "password") {
+                passwordField.type = "text";
+                passwordIcon.classList.remove("fa-eye");
+                passwordIcon.classList.add("fa-eye-slash");
+            } else {
+                passwordField.type = "password";
+                passwordIcon.classList.remove("fa-eye-slash");
+                passwordIcon.classList.add("fa-eye");
+            }
+        }
+    </script>
+</body>
+</html>
